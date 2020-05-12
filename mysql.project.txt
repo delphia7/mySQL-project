@@ -1,0 +1,46 @@
+USE university_project_schema;
+
+-- The average grade given by each professor
+
+SELECT professor_id, professor_n ame, AVG(grade_value)
+FROM professors p
+JOIN grades g
+ON g.grade_professor_id = p.professor_id
+GROUP BY professor_name;
+
+-- The top grades for each student
+
+SELECT student_id, student_name, MAX(grade_value)
+FROM students s
+JOIN grades g
+ON g.grade_student_id = s.student_id
+GROUP BY student_name;
+
+-- Group students by the courses that they are enrolled in
+
+SELECT student_name, course_name
+FROM students s
+JOIN courses c
+ON c.course_student_id = s.student_id
+ORDER BY course_name;
+
+-- course with the lowest average grade
+
+SELECT course_id, course_name, MIN(grade_value)
+FROM courses c
+JOIN grades g
+ON g.grade_course_id = c.course_id
+GROUP BY course_name
+ORDER BY grade_value ASC;
+
+-- Finding which student and professor have the most courses in common
+
+SELECT professor_name, student_name, COUNT(course_name)
+FROM professors p
+JOIN courses c
+ON c.course_professor_id = p.professor_id
+JOIN students s
+ON c.course_student_id = s.student_id
+GROUP BY course_name
+ORDER BY COUNT(course_name) DESC
+LIMIT 1;
